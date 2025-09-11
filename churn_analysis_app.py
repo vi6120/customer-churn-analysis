@@ -161,6 +161,60 @@ def plot_feature_importance(model, feature_names, top_n=10):
     fig.update_layout(yaxis={'categoryorder': 'total ascending'})
     return fig
 
+def calculate_churn_kpis(df, model, feature_names):
+    """Calculate advanced churn KPIs including financial impact."""
+    kpis = {}
+    
+    if not hasattr(model, 'feature_importances_'):
+        return kpis
+    
+    # Get top 3 features
+    importance_df = pd.DataFrame({
+        'feature': feature_names,
+        'importance': model.feature_importances_
+    }).sort_values('importance', ascending=False)
+    
+    top_3_features = importance_df.head(3)['feature'].tolist()
+    kpis['top_3_features'] = top_3_features
+    
+    # Calculate financial impact if TotalCharges exists
+    if 'TotalCharges' in df.columns:
+        churned_customers = df[df['Churn'] == 1]
+        total_charges_lost = churned_customers['TotalCharges'].sum()
+        total_charges_all = df['TotalCharges'].sum()
+        
+        kpis['total_charges_lost'] = total_charges_lost
+        kpis['total_charges_all'] = total_charges_all
+        kpis['churn_loss_percentage'] = (total_charges_lost / total_charges_all) * 100
+        
+        # Calculate impact by top features (approximate)
+        feature_impact = {}
+        for feature in top_3_features:
+            if feature in df.columns:
+                # For categorical features, find the category with highest churn
+                if df[feature].dtype == 'object' or df[feature].nunique() < 10:
+                    feature_churn = df.groupby(feature)['Churn'].agg(['sum', 'count']).reset_index()
+                    feature_churn['churn_rate'] = feature_churn['sum'] / feature_churn['count']
+                    worst_category = feature_churn.loc[feature_churn['churn_rate'].idxmax(), feature]
+                    
+                    worst_category_customers = df[(df[feature] == worst_category) & (df['Churn'] == 1)]
+                    feature_loss = worst_category_customers['TotalCharges'].sum()
+                else:
+                    # For numerical features, use median split
+                    median_val = df[feature].median()
+                    high_risk_customers = df[(df[feature] > median_val) & (df['Churn'] == 1)]
+                    feature_loss = high_risk_customers['TotalCharges'].sum()
+                
+                feature_impact[feature] = feature_loss
+        
+        kpis['feature_impact'] = feature_impact
+        kpis['top_3_total_loss'] = sum(feature_impact.values())
+        
+        if total_charges_all > 0:
+            kpis['top_3_loss_percentage'] = (kpis['top_3_total_loss'] / total_charges_all) * 100
+    
+    return kpis
+
 # Main Application
 def main():
     # Custom CSS for responsive design and centered title
@@ -256,6 +310,59 @@ def main():
             st.metric("Features", len(df.columns) - 1)
         with col4:
             st.metric("Churned Customers", df['Churn'].sum())
+        
+        # Advanced KPIs section (only show after model training)
+        if 'model' in st.session_state and 'TotalCharges' in df.columns:
+            st.subheader("💰 Financial Impact Analysis")
+            
+            kpis = calculate_churn_kpis(df, st.session_state['model'], st.session_state['feature_names'])
+            
+            if mobile_view:
+                col1, col2 = st.columns(2)
+                col3 = st.columns(1)[0]
+            else:
+                col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                if 'total_charges_lost' in kpis:
+                    st.metric(
+                        "💸 Total Revenue Lost", 
+                        f"${kpis['total_charges_lost']:,.0f}",
+                        help="Total charges lost due to customer churn"
+                    )
+            
+            with col2:
+                if 'churn_loss_percentage' in kpis:
+                    st.metric(
+                        "📉 Revenue Loss %", 
+                        f"{kpis['churn_loss_percentage']:.1f}%",
+                        help="Percentage of total revenue lost to churn"
+                    )
+            
+            with col3:
+                if 'top_3_loss_percentage' in kpis:
+                    st.metric(
+                        "🎯 Top 3 Features Impact", 
+                        f"{kpis['top_3_loss_percentage']:.1f}%",
+                        help="Revenue loss percentage attributed to top 3 churn drivers"
+                    )
+            
+            # Show top 3 features breakdown
+            if 'top_3_features' in kpis and 'feature_impact' in kpis:
+                st.subheader("🔍 Top 3 Churn Drivers Financial Impact")
+                
+                impact_data = []
+                for i, feature in enumerate(kpis['top_3_features'], 1):
+                    loss = kpis['feature_impact'].get(feature, 0)
+                    impact_data.append({
+                        'Rank': f"#{i}",
+                        'Feature': feature,
+                        'Revenue Lost': f"${loss:,.0f}",
+                        'Impact %': f"{(loss/kpis['total_charges_all']*100):.1f}%" if kpis['total_charges_all'] > 0 else "0%"
+                    })
+                
+                impact_df = pd.DataFrame(impact_data)
+                st.dataframe(impact_df, use_container_width=True, hide_index=True)
         
         # Data preview
         st.subheader("Data Preview")
