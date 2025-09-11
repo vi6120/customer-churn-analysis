@@ -6,6 +6,10 @@
 
 A comprehensive machine learning project for predicting customer churn using analytics and machine learning techniques.
 
+## [Live Demo](https://my-customer-churn-analysis.streamlit.app)
+
+Interactive dashboard with sample data ready to explore!
+
 ## Project Overview
 
 This project analyzes customer behavior patterns to predict which customers are likely to churn (leave the service) and provides actionable business insights for customer retention strategies.
