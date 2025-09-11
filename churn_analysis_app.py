@@ -173,11 +173,12 @@ def main():
     # Sidebar
     st.sidebar.header("Configuration")
     st.sidebar.caption("Version 1.0.0")
+    st.sidebar.info("💡 Sample data is loaded by default for quick exploration!")
     
     # Data source selection
     data_source = st.sidebar.radio(
         "Select Data Source",
-        ["Upload CSV File", "Use Sample Data"]
+        ["Use Sample Data", "Upload CSV File"]
     )
     
     # Load data
@@ -185,12 +186,13 @@ def main():
         uploaded_file = st.sidebar.file_uploader("Choose CSV file", type=['csv'])
         if uploaded_file is not None:
             df = pd.read_csv(uploaded_file)
+            st.sidebar.success("Using uploaded data")
         else:
-            st.info("Please upload a CSV file to get started.")
+            st.info("Please upload a CSV file or switch to sample data to get started.")
             return
     else:
         df = generate_sample_data()
-        st.sidebar.success("Using sample data")
+        st.sidebar.success("Using sample data (2000 customers)")
     
     # Clean data
     df = clean_data(df)
