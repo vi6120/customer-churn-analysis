@@ -163,7 +163,7 @@ def plot_feature_importance(model, feature_names, top_n=10):
 
 # Main Application
 def main():
-    st.title("Customer Churn Analysis Dashboard")
+    st.title("Customer Churn Analysis Dashboard v1.0.0")
     st.markdown("""
     Analyze customer churn patterns and predict which customers are likely to leave.
     
@@ -172,6 +172,7 @@ def main():
     
     # Sidebar
     st.sidebar.header("Configuration")
+    st.sidebar.caption("Version 1.0.0")
     
     # Data source selection
     data_source = st.sidebar.radio(
