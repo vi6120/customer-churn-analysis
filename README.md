@@ -1,3 +1,7 @@
+## Author
+
+**Vikas Ramaswamy**
+
 # Customer Churn Analysis with Python
 
 A comprehensive machine learning project for predicting customer churn using analytics and machine learning techniques.
@@ -172,10 +176,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Disclaimer
 
 **Educational Purpose Only**: This project is created for educational and demonstration purposes. The analysis and predictions should not be used for actual business decisions without proper validation and domain expertise. The dataset used may be synthetic or anonymized for learning purposes.
-
-## Author
-
-**Vikas Ramaswamy**
 
 ## Contact
 
