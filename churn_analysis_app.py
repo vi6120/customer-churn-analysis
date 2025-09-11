@@ -311,59 +311,6 @@ def main():
         with col4:
             st.metric("Churned Customers", df['Churn'].sum())
         
-        # Advanced KPIs section (only show after model training)
-        if 'model' in st.session_state and 'TotalCharges' in df.columns:
-            st.subheader("💰 Financial Impact Analysis")
-            
-            kpis = calculate_churn_kpis(df, st.session_state['model'], st.session_state['feature_names'])
-            
-            if mobile_view:
-                col1, col2 = st.columns(2)
-                col3 = st.columns(1)[0]
-            else:
-                col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                if 'total_charges_lost' in kpis:
-                    st.metric(
-                        "💸 Total Revenue Lost", 
-                        f"${kpis['total_charges_lost']:,.0f}",
-                        help="Total charges lost due to customer churn"
-                    )
-            
-            with col2:
-                if 'churn_loss_percentage' in kpis:
-                    st.metric(
-                        "📉 Revenue Loss %", 
-                        f"{kpis['churn_loss_percentage']:.1f}%",
-                        help="Percentage of total revenue lost to churn"
-                    )
-            
-            with col3:
-                if 'top_3_loss_percentage' in kpis:
-                    st.metric(
-                        "🎯 Top 3 Features Impact", 
-                        f"{kpis['top_3_loss_percentage']:.1f}%",
-                        help="Revenue loss percentage attributed to top 3 churn drivers"
-                    )
-            
-            # Show top 3 features breakdown
-            if 'top_3_features' in kpis and 'feature_impact' in kpis:
-                st.subheader("🔍 Top 3 Churn Drivers Financial Impact")
-                
-                impact_data = []
-                for i, feature in enumerate(kpis['top_3_features'], 1):
-                    loss = kpis['feature_impact'].get(feature, 0)
-                    impact_data.append({
-                        'Rank': f"#{i}",
-                        'Feature': feature,
-                        'Revenue Lost': f"${loss:,.0f}",
-                        'Impact %': f"{(loss/kpis['total_charges_all']*100):.1f}%" if kpis['total_charges_all'] > 0 else "0%"
-                    })
-                
-                impact_df = pd.DataFrame(impact_data)
-                st.dataframe(impact_df, use_container_width=True, hide_index=True)
-        
         # Data preview
         st.subheader("Data Preview")
         st.dataframe(df.head(), use_container_width=True)
@@ -416,6 +363,7 @@ def main():
                 if model_type == "Logistic Regression":
                     scaler = StandardScaler()
                     X_train_scaled = scaler.fit_transform(X_train)
+
                     X_test_scaled = scaler.transform(X_test)
                     model = LogisticRegression(random_state=42)
                     model.fit(X_train_scaled, y_train)
@@ -463,6 +411,59 @@ def main():
                 st.metric("F1 Score", f"{metrics['f1']:.3f}")
             with col5:
                 st.metric("ROC AUC", f"{metrics['roc_auc']:.3f}")
+            
+            # Financial Impact KPIs (only show if TotalCharges exists)
+            if 'TotalCharges' in df.columns:
+                st.subheader("Financial Impact Analysis")
+                
+                kpis = calculate_churn_kpis(df, st.session_state['model'], st.session_state['feature_names'])
+                
+                if mobile_view:
+                    col1, col2 = st.columns(2)
+                    col3 = st.columns(1)[0]
+                else:
+                    col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    if 'total_charges_lost' in kpis:
+                        st.metric(
+                            "Total Revenue Lost", 
+                            f"${kpis['total_charges_lost']:,.0f}",
+                            help="Total charges lost due to customer churn"
+                        )
+                
+                with col2:
+                    if 'churn_loss_percentage' in kpis:
+                        st.metric(
+                            "Revenue Loss %", 
+                            f"{kpis['churn_loss_percentage']:.1f}%",
+                            help="Percentage of total revenue lost to churn"
+                        )
+                
+                with col3:
+                    if 'top_3_loss_percentage' in kpis:
+                        st.metric(
+                            "Top 3 Features Impact", 
+                            f"{kpis['top_3_loss_percentage']:.1f}%",
+                            help="Revenue loss percentage attributed to top 3 churn drivers"
+                        )
+                
+                # Show top 3 features breakdown
+                if 'top_3_features' in kpis and 'feature_impact' in kpis:
+                    st.subheader("Top 3 Churn Drivers Financial Impact")
+                    
+                    impact_data = []
+                    for i, feature in enumerate(kpis['top_3_features'], 1):
+                        loss = kpis['feature_impact'].get(feature, 0)
+                        impact_data.append({
+                            'Rank': f"#{i}",
+                            'Feature': feature,
+                            'Revenue Lost': f"${loss:,.0f}",
+                            'Impact %': f"{(loss/kpis['total_charges_all']*100):.1f}%" if kpis['total_charges_all'] > 0 else "0%"
+                        })
+                    
+                    impact_df = pd.DataFrame(impact_data)
+                    st.dataframe(impact_df, use_container_width=True, hide_index=True)
             
             # Feature importance
             if st.session_state['model_type'] in ["Random Forest", "XGBoost"]:
