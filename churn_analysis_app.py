@@ -163,17 +163,44 @@ def plot_feature_importance(model, feature_names, top_n=10):
 
 # Main Application
 def main():
-    st.title("Customer Churn Analysis Dashboard v1.0.0")
+    # Custom CSS for responsive design and centered title
     st.markdown("""
-    Analyze customer churn patterns and predict which customers are likely to leave.
+    <style>
+    .main-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #1f77b4;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        color: #666;
+    }
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 1.8rem;
+        }
+        .subtitle {
+            font-size: 1rem;
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
-    **Educational Purpose Only**: This tool is for learning and demonstration purposes.
-    """)
+    # Centered title
+    st.markdown('<h1 class="main-title">Customer Churn Analysis Dashboard v1.0.0</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Analyze customer churn patterns and predict which customers are likely to leave.<br><strong>Educational Purpose Only</strong>: This tool is for learning and demonstration purposes.</p>', unsafe_allow_html=True)
     
     # Sidebar
     st.sidebar.header("Configuration")
     st.sidebar.caption("Version 1.0.0")
     st.sidebar.info("💡 Sample data is loaded by default for quick exploration!")
+    
+    # Mobile view toggle
+    mobile_view = st.sidebar.checkbox("📱 Mobile Layout", help="Optimize layout for mobile screens")
     
     # Data source selection
     data_source = st.sidebar.radio(
@@ -207,7 +234,12 @@ def main():
     if df is not None:
         # Dataset overview
         st.header("Dataset Overview")
-        col1, col2, col3, col4 = st.columns(4)
+        # Responsive columns
+        if mobile_view:
+            col1, col2 = st.columns(2)
+            col3, col4 = st.columns(2)
+        else:
+            col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             st.metric("Total Customers", len(df))
