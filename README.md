@@ -12,6 +12,22 @@ This project analyzes customer behavior patterns to predict which customers are 
 
 **Educational Purpose**: This project is created for educational and demonstration purposes only.
 
+## Required Data Fields
+
+**IMPORTANT**: Your dataset must contain these exact column names for the application to work properly:
+
+### Mandatory Fields:
+- **`Churn`** - Target variable (binary: 0/1, Yes/No, True/False)
+- **`customerID`** - Unique customer identifier
+
+### Required for Full Functionality:
+- **`Contract`** - Contract type (used in business insights)
+- **`tenure`** - Customer tenure in months (used in business insights)
+- **`TotalCharges`** - Total charges (handled in data cleaning)
+
+### Optional Fields:
+Any additional categorical or numerical features (gender, services, charges, etc.) will be automatically processed for analysis.
+
 ## Features
 
 - **Exploratory Data Analysis**: Comprehensive analysis of customer churn patterns
