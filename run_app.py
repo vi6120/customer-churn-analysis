@@ -12,7 +12,7 @@ def install_requirements():
     """Install required packages."""
     print("Installing required packages...")
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements_streamlit.txt"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
         print("✓ Packages installed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -43,7 +43,7 @@ def main():
     # Install requirements
     if not install_requirements():
         print("Failed to install requirements. Please install manually:")
-        print("pip install -r requirements_streamlit.txt")
+        print("pip install -r requirements.txt")
         sys.exit(1)
     
     print("\n" + "=" * 50)

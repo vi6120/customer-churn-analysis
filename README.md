@@ -53,7 +53,7 @@ customer-churn-analysis/
 │   ├── 01_exploratory_data_analysis.ipynb
 │   └── 02_machine_learning_modeling.ipynb
 ├── models/                        # Saved ML models
-├── app.py                         # Streamlit dashboard
+├── churn_analysis_app.py          # Streamlit dashboard
 ├── utils.py                       # Utility functions
 ├── requirements.txt               # Dependencies
 ├── README.md                      # Project documentation
@@ -97,7 +97,7 @@ jupyter notebook notebooks/02_machine_learning_modeling.ipynb
 
 Run the interactive web application:
 ```bash
-streamlit run app.py
+streamlit run churn_analysis_app.py
 ```
 
 The dashboard provides:
@@ -178,7 +178,7 @@ Based on the analysis, the main churn drivers typically include:
 pip install -r requirements.txt
 
 # Run the application
-streamlit run app.py
+streamlit run churn_analysis_app.py
 ```
 
 ## Contributing

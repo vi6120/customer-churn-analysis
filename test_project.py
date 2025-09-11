@@ -75,9 +75,9 @@ def test_streamlit_app():
     
     try:
         # Try to import the app (this will test syntax)
-        import app
+        import churn_analysis_app
         print("✓ Streamlit app imports successfully")
-        print("To run the app: streamlit run app.py")
+        print("To run the app: streamlit run churn_analysis_app.py")
         return True
         
     except Exception as e:
@@ -104,7 +104,7 @@ def main():
         print("✓ All tests passed! Project is ready to use.")
         print("\nNext steps:")
         print("1. Run: jupyter notebook notebooks/01_exploratory_data_analysis.ipynb")
-        print("2. Run: streamlit run app.py")
+        print("2. Run: streamlit run churn_analysis_app.py")
     else:
         print("✗ Some tests failed. Please check the errors above.")
         sys.exit(1)
