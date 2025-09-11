@@ -201,13 +201,13 @@ def main():
     
     # Quick links
     st.sidebar.markdown("---")
-    st.sidebar.markdown("**📝 Feedback & Support:**")
-    st.sidebar.markdown("- [🐛 Report Bug](https://github.com/vi6120/customer-churn-analysis/issues/new?labels=bug&title=[BUG]%20Issue%20Title)")
-    st.sidebar.markdown("- [💡 Request Feature](https://github.com/vi6120/customer-churn-analysis/issues/new?labels=enhancement&title=[FEATURE]%20Feature%20Title)")
-    st.sidebar.markdown("- [📚 Documentation](https://github.com/vi6120/customer-churn-analysis#readme)")
+    st.sidebar.markdown("**Feedback & Support:**")
+    st.sidebar.markdown("- [Report Bug](https://github.com/vi6120/customer-churn-analysis/issues/new?labels=bug&title=[BUG]%20Issue%20Title)")
+    st.sidebar.markdown("- [Request Feature](https://github.com/vi6120/customer-churn-analysis/issues/new?labels=enhancement&title=[FEATURE]%20Feature%20Title)")
+    st.sidebar.markdown("- [Documentation](https://github.com/vi6120/customer-churn-analysis#readme)")
     
     # Mobile view toggle
-    mobile_view = st.sidebar.checkbox("📱 Mobile Layout", help="Optimize layout for mobile screens")
+    mobile_view = st.sidebar.checkbox("Mobile Layout", help="Optimize layout for mobile screens")
     
     # Data source selection
     data_source = st.sidebar.radio(
