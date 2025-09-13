@@ -13,10 +13,10 @@ def install_requirements():
     print("Installing required packages...")
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("✓ Packages installed successfully")
+        print("Packages installed successfully")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"✗ Failed to install packages: {e}")
+        print(f"Failed to install packages: {e}")
         return False
 
 def run_streamlit_app():

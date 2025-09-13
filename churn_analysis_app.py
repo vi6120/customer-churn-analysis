@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore')
 # Page configuration
 st.set_page_config(
     page_title="Customer Churn Analysis",
-    page_icon="📊",
+    page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -245,13 +245,27 @@ def main():
     """, unsafe_allow_html=True)
     
     # Centered title
-    st.markdown('<h1 class="main-title">Customer Churn Analysis Dashboard v1.0.0</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">Analyze customer churn patterns and predict which customers are likely to leave.<br><strong>Educational Purpose Only</strong>: This tool is for learning and demonstration purposes.</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-title">Customer Churn Analysis Dashboard</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Professional machine learning solution for customer retention analysis<br><strong>Educational Purpose Only</strong>: This tool is for learning and demonstration purposes.</p>', unsafe_allow_html=True)
+    
+    # Professional header info
+    st.markdown("""
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #1f77b4;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>Author:</strong> Vikas Ramaswamy | <strong>Version:</strong> 1.0 | <strong>Technology:</strong> Python, Scikit-learn, XGBoost, Streamlit
+            </div>
+            <div style="color: #6c757d; font-size: 0.9rem;">
+                Professional Machine Learning Solution for Customer Analytics
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Sidebar
     st.sidebar.header("Configuration")
     st.sidebar.caption("Version 1.0.0")
-    st.sidebar.info("💡 Sample data is loaded by default for quick exploration!")
+    st.sidebar.info("Sample data is loaded by default for quick exploration")
     
     # Quick links
     st.sidebar.markdown("---")
@@ -561,17 +575,35 @@ def main():
                         risk_level = "Low Risk"
                         risk_color = "green"
                     
-                    st.markdown(f"**Risk Level:** :{risk_color}[{risk_level}]")
+                    if risk_color == "red":
+                        st.error(f"Risk Level: {risk_level}")
+                    elif risk_color == "orange":
+                        st.warning(f"Risk Level: {risk_level}")
+                    else:
+                        st.success(f"Risk Level: {risk_level}")
                 
                 # Customer details
                 st.subheader("Customer Details")
                 st.dataframe(customer_data, use_container_width=True)
 
-    # Footer
+    # Professional Footer
     st.markdown("---")
     st.markdown("""
-    **Disclaimer**: This application is for educational purposes only. 
-    Predictions should not be used for actual business decisions without proper validation.
+    <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px; margin-top: 2rem;">
+        <div style="margin-bottom: 1rem;">
+            <strong>Customer Churn Analysis Dashboard</strong>
+        </div>
+        <div style="color: #6c757d; margin-bottom: 1rem;">
+            Professional machine learning solution for predicting customer churn and developing retention strategies
+        </div>
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <div><strong>Models:</strong> Logistic Regression | Random Forest | XGBoost</div>
+            <div><strong>Technology:</strong> Python | Scikit-learn | Streamlit</div>
+        </div>
+        <div style="color: #6c757d; font-size: 0.9rem;">
+            © 2024 Vikas Ramaswamy | Professional Analytics Portfolio | Educational Purpose Only
+        </div>
+    </div>
     """)
 
 if __name__ == "__main__":
