@@ -592,19 +592,19 @@ if __name__ == "__main__":
     # Professional Footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px; margin-top: 2rem;">
-        <div style="margin-bottom: 1rem;">
+    <div style='text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px; margin-top: 2rem;'>
+        <div style='margin-bottom: 1rem;'>
             <strong>Customer Churn Analysis Dashboard</strong>
         </div>
-        <div style="color: #6c757d; margin-bottom: 1rem;">
+        <div style='color: #6c757d; margin-bottom: 1rem;'>
             Professional machine learning solution for predicting customer churn and developing retention strategies
         </div>
-        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <div style='display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;'>
             <div><strong>Models:</strong> Logistic Regression | Random Forest | XGBoost</div>
             <div><strong>Technology:</strong> Python | Scikit-learn | Streamlit</div>
         </div>
-        <div style="color: #6c757d; font-size: 0.9rem;">
+        <div style='color: #6c757d; font-size: 0.9rem;'>
             © 2024 Vikas Ramaswamy | Professional Analytics Portfolio | Educational Purpose Only
         </div>
     </div>
-    """)
+    """, unsafe_allow_html=True)
