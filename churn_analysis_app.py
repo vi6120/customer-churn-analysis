@@ -586,6 +586,9 @@ def main():
                 st.subheader("Customer Details")
                 st.dataframe(customer_data, use_container_width=True)
 
+if __name__ == "__main__":
+    main()
+    
     # Professional Footer
     st.markdown("---")
     st.markdown("""
@@ -605,6 +608,3 @@ def main():
         </div>
     </div>
     """)
-
-if __name__ == "__main__":
-    main()
