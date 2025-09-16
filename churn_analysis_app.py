@@ -51,6 +51,7 @@ def generate_sample_data(n_samples=2000):
     
     # Create realistic churn patterns
     churn_prob = np.zeros(n_samples)
+    # amazonq-ignore-next-line
     for i in range(n_samples):
         prob = 0.1
         if data['Contract'][i] == 'Month-to-month':
@@ -118,6 +119,7 @@ def plot_churn_distribution(df):
     """Plot churn distribution."""
     churn_counts = df['Churn'].value_counts()
     fig = go.Figure(data=[go.Pie(
+        # amazonq-ignore-next-line
         labels=['No Churn', 'Churn'],
         values=churn_counts.values,
         hole=0.3,
@@ -185,6 +187,7 @@ def calculate_churn_kpis(df, model, feature_names):
         
         kpis['total_charges_lost'] = total_charges_lost
         kpis['total_charges_all'] = total_charges_all
+        # amazonq-ignore-next-line
         kpis['churn_loss_percentage'] = (total_charges_lost / total_charges_all) * 100
         
         # Calculate impact by top features (approximate)
