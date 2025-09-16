@@ -9,7 +9,7 @@ import sys
 import os
 
 def install_requirements():
-    """Install required packages."""
+    """Install the packages we need."""
     print("Installing required packages...")
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
@@ -20,7 +20,7 @@ def install_requirements():
         return False
 
 def run_streamlit_app():
-    """Run the Streamlit application."""
+    """Start the web app."""
     print("Starting Streamlit application...")
     try:
         subprocess.run([sys.executable, "-m", "streamlit", "run", "churn_analysis_app.py"])
@@ -30,17 +30,17 @@ def run_streamlit_app():
         print(f"Error running application: {e}")
 
 def main():
-    """Main execution function."""
+    """Run the complete setup and launch."""
     print("Customer Churn Analysis - Complete Application")
     print("=" * 50)
     
-    # Check if we're in the right directory
+    # Make sure we're in the right place
     if not os.path.exists("churn_analysis_app.py"):
         print("Error: churn_analysis_app.py not found in current directory")
         print("Please run this script from the project root directory")
         sys.exit(1)
     
-    # Install requirements
+    # Install what we need
     if not install_requirements():
         print("Failed to install requirements. Please install manually:")
         print("pip install -r requirements.txt")
@@ -52,7 +52,7 @@ def main():
     print("Press Ctrl+C to stop the application")
     print("=" * 50)
     
-    # Run the application
+    # Start the app
     run_streamlit_app()
 
 if __name__ == "__main__":

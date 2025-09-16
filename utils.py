@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 
 def load_and_clean_data(file_path):
     """
-    Load and clean the customer churn dataset.
+    Load the customer data and fix any issues.
     
     Args:
         file_path (str): Path to the CSV file
@@ -26,11 +26,11 @@ def load_and_clean_data(file_path):
     """
     df = pd.read_csv(file_path)
     
-    # Handle missing values
+    # Fix the TotalCharges column (sometimes has spaces instead of numbers)
     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
     df['TotalCharges'].fillna(df['TotalCharges'].median(), inplace=True)
     
-    # Convert target variable to binary
+    # Convert Yes/No to 1/0 for machine learning
     df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
     
     return df
@@ -38,7 +38,7 @@ def load_and_clean_data(file_path):
 
 def encode_categorical_features(df):
     """
-    Encode categorical features for machine learning models.
+    Convert text categories to numbers for ML models.
     
     Args:
         df (pd.DataFrame): Input dataframe
@@ -63,7 +63,7 @@ def encode_categorical_features(df):
 
 def prepare_features(df):
     """
-    Prepare features for machine learning models.
+    Set up the data for training ML models.
     
     Args:
         df (pd.DataFrame): Input dataframe
@@ -71,11 +71,11 @@ def prepare_features(df):
     Returns:
         tuple: X (features), y (target), feature_names
     """
-    # Drop non-predictive columns
+    # Remove columns we don't want to use for prediction
     features_to_drop = ['customerID']
     df_features = df.drop(columns=features_to_drop, errors='ignore')
     
-    # Separate features and target
+    # Split into input features and what we want to predict
     X = df_features.drop('Churn', axis=1)
     y = df_features['Churn']
     
@@ -84,7 +84,7 @@ def prepare_features(df):
 
 def evaluate_model(model, X_test, y_test):
     """
-    Evaluate model performance with multiple metrics.
+    Check how well the model performs.
     
     Args:
         model: Trained model
@@ -110,7 +110,7 @@ def evaluate_model(model, X_test, y_test):
 
 def plot_churn_distribution(df):
     """
-    Plot churn distribution.
+    Show how many customers churned vs stayed.
     
     Args:
         df (pd.DataFrame): Input dataframe
@@ -138,7 +138,7 @@ def plot_churn_distribution(df):
 
 def plot_churn_by_feature(df, feature):
     """
-    Plot churn rate by categorical feature.
+    Show churn rates for different categories.
     
     Args:
         df (pd.DataFrame): Input dataframe
@@ -171,7 +171,7 @@ def plot_churn_by_feature(df, feature):
 
 def plot_feature_importance(model, feature_names, top_n=10):
     """
-    Plot feature importance for tree-based models.
+    Show which features matter most for predictions.
     
     Args:
         model: Trained model with feature_importances_ attribute
@@ -208,7 +208,7 @@ def plot_feature_importance(model, feature_names, top_n=10):
 
 def generate_business_insights(df, model, feature_names):
     """
-    Generate business insights based on the analysis.
+    Extract key business insights from the analysis.
     
     Args:
         df (pd.DataFrame): Input dataframe
@@ -220,21 +220,21 @@ def generate_business_insights(df, model, feature_names):
     """
     insights = {}
     
-    # Overall churn rate
+    # What percentage of customers churn overall
     insights['overall_churn_rate'] = df['Churn'].mean()
     
-    # High-risk segments
+    # Find which customer groups are most likely to leave
     if 'Contract' in df.columns:
         contract_churn = df.groupby('Contract')['Churn'].mean()
         insights['highest_risk_contract'] = contract_churn.idxmax()
         insights['highest_risk_contract_rate'] = contract_churn.max()
     
     if 'tenure' in df.columns:
-        # Customers with low tenure and high churn
+        # New customers (first year) churn rate
         low_tenure_churn = df[df['tenure'] <= 12]['Churn'].mean()
         insights['low_tenure_churn_rate'] = low_tenure_churn
     
-    # Feature importance insights
+    # What factors drive churn the most
     if hasattr(model, 'feature_importances_'):
         feature_importance = pd.DataFrame({
             'feature': feature_names,
